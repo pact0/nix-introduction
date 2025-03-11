@@ -30,6 +30,12 @@
           python-pkgs.pandas
           python-pkgs.requests
         ]))
+
+        (graphviz.override
+          {
+            # disable xorg support
+            withXorg = false;
+          })
       ]
       ++ [
         inputs.old-python.legacyPackages.${system}.python27
