@@ -8,6 +8,7 @@
     # at the same time. Here's an working example:
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
+    old-python.url = "github:NixOS/nixpkgs/6b5019a48f876f3288efc626fa8b70ad0c64eb46"; # old version of python
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.11";
@@ -36,6 +37,16 @@
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+
+    # Dev shells
+    # Accessible through 'nix develop'
+    # devShells = forAllSystems (system: import ./devShells nixpkgs.legacyPackages.${system});
+    devShells = forAllSystems (system:
+      import ./devShells {
+        pkgs = nixpkgs.legacyPackages.${system};
+        inherit inputs system;
+      });
+
     # Formatter for your nix files, available through 'nix fmt'
     # Other options beside 'alejandra' include 'nixpkgs-fmt'
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
