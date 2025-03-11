@@ -10,6 +10,12 @@
     # Also see the 'unstable-packages' overlay at 'overlays/default.nix'.
     old-python.url = "github:NixOS/nixpkgs/6b5019a48f876f3288efc626fa8b70ad0c64eb46"; # old version of python
 
+    # unify nix-shell and flakes nix develop
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
+
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -40,7 +46,6 @@
 
     # Dev shells
     # Accessible through 'nix develop'
-    # devShells = forAllSystems (system: import ./devShells nixpkgs.legacyPackages.${system});
     devShells = forAllSystems (system:
       import ./devShells {
         pkgs = nixpkgs.legacyPackages.${system};
