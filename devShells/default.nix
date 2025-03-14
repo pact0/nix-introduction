@@ -23,8 +23,8 @@
       [
         jdk
         opencv
-        # ruby
-        # cargo
+        ruby
+        cargo
 
         (python3.withPackages (python-pkgs: [
           python-pkgs.pandas

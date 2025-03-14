@@ -21,6 +21,21 @@
 in {
   # example = pkgs.callPackage ./example { };
   hello = pkgs.hello-cpp;
+  mqtt =
+    pkgs.mosquitto.overrideAttrs
+    (old: {
+      cmakeFlags =
+        old.cmakeFlags
+        ++ ["-DWITH_WEBSOCKETS=ON"];
+      version = "2.0.13";
+      # pkgs.fetchgit
+      src = pkgs.fetchFromGitHub {
+        owner = "eclipse";
+        repo = "mosquitto";
+        rev = "v2.0.13";
+        sha256 = "sha256-Nnt4NCxMTNe5FCzW3hHtQG27jyn3mM6ZQCgQO/wbolc=";
+      };
+    });
   patchedHello = callPackage ./patchedHelloPackage {inherit pkgs;};
   localProject = callPackage ./localProject {inherit pkgs;};
   shellScript = callPackage ./shellScript {inherit pkgs;};
@@ -50,6 +65,15 @@ in {
         "-c"
         "echo hello > foo; cat foo"
       ];
+    };
+  };
+
+  dockerToolsExample = pkgs.dockerTools.buildLayeredImage {
+    name = "go-app";
+    tag = "latest";
+    contents = [pkgs.go];
+    config = {
+      Cmd = ["${pkgs.go}/bin/go"];
     };
   };
 }
